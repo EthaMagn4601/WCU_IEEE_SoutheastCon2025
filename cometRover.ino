@@ -1,3 +1,6 @@
+// Code meant for Arduino Pro Micro controller, with implementation of a motor driver and two DC motors with rotary encoders
+// Code written by Ethan Magnante, with immense influence by Curio Res: https://curiores.com/positioncontrol
+
 #define A_ENCA 16 // Yellow Wire for Motor A
 #define A_ENCB 10 // White Wire for Motor A
 #define A_PWM 5 // PWM Control for Motor A
@@ -13,6 +16,10 @@
 int A_pos = 0;
 int B_pos = 0;
 
+long prevT = 0;
+float eprev = 0;
+float eintegral = 0;
+
 void setup() {
   Serial.begin(9600);
   pinMode(A_ENCA, INPUT);
@@ -26,14 +33,17 @@ void setup() {
 }
 
 void loop() {
-  //(int A_dir, int A_PWMVal)
-  A_setMotor(1, 10);
-  delay(200);
-  Serial.println(A_pos);
-  A_setMotor(-1, 25);
-  delay(200);
-  Serial.println(A_pos);
-  A_setMotor(0, 25);
-  delay(200);
-  Serial.println(A_pos);
+  
+  // set target position
+  int target = 1200;
+
+  // PID constants for P.I.D Control System
+  float kp = 1;
+  float kd = 0;
+  float ki = 0;
+
+  // stores current time in μs
+  long currT = micros();
+  // time difference for 
+  float deltaT =  ((float)(currT-prevT))/1.0e6;
 }
